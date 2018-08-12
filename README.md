@@ -2,7 +2,7 @@ A minimalistic thought journal.
 
 Currently in progress.
 
-Technologies used:
+Technologies used:\
 **Typescript**\
 **React**\
 **React-router v4**\
