@@ -1,4 +1,5 @@
 import * as React from 'react';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import User from "../../domain/viewModel/User";
 import IntroPage from "./IntroPage";
 import UseCaseRegistry from "../../application/useCase/UseCaseRegistry";
@@ -14,7 +15,8 @@ import {
 import 'react-router-modal/css/react-router-modal.css';
 import LoginModal from "./LoginModal";
 import ProtectedRoute from "./ProtectedRoute";
-import Thoughts from "./Thoughts";
+import Thoughts from "./Thoughts/Thoughts";
+import RegisterButtons from "./RegisterButtons";
 
 interface IState {
     user?: User,
@@ -25,11 +27,9 @@ interface IProps {
     useCaseRegistry: UseCaseRegistry
 }
 
-const Header = styled.header`
-    text-align: center;
-    font-size: 2.5em;
-    padding-top: 1em;
-`;
+
+const YOUR_FIREBASE_API_KEY = 'AIzaSyAjtxmQD29dAeMruRmTjq7ZkHuCDjwm-as';
+console.log(localStorage.getItem(`firebase:authUser:${YOUR_FIREBASE_API_KEY}:[DEFAULT]`), 'localstorage');
 
 class App extends React.Component<IProps, IState> {
     public state: IState = {
@@ -45,24 +45,30 @@ class App extends React.Component<IProps, IState> {
         const {user, loadingAuth} = this.state;
         return (
             <div>
-                <Header>Thoughts Journal</Header>
+                <CssBaseline />
                 <Router>
-                    {!loadingAuth && <div>
+                    <div>
                         <Route
                             exact={true}
                             path="/"
                             component={IntroPage}
                         />
-                        <ModalRoute
-                            path='/login'
-                            parentPath='/thoughts'
-                            closeModal='/'
-                            component={LoginModal}
-                            props={{handleGoogleLogin: this.handleGoogleLogin, isLoggedIn: !!user}}
-                        />
-                        <ProtectedRoute path='/thoughts' user={user} component={Thoughts} />
+                        {!loadingAuth && <div>
+                            <Route
+                                exact={true}
+                                path="/"
+                                render={(props: any) => <RegisterButtons {...props} isSignedIn={!!user} />}
+                            />
+                            <ModalRoute
+                                path='/login'
+                                parentPath='/thoughts'
+                                closeModal='/'
+                                component={LoginModal}
+                                props={{handleGoogleLogin: this.handleGoogleLogin, isLoggedIn: !!user}}
+                            />
+                            <ProtectedRoute path='/thoughts' user={user} component={Thoughts} />
+                        </div>}
                     </div>
-                    }
                 </Router>
                 <ModalContainer />
             </div>

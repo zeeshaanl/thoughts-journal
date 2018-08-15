@@ -32,7 +32,7 @@ export default class FirebaseProviderAuthentication implements IAuthentication {
             const result: IAuthResult = await this.firebase.auth().signInWithPopup(this.providerMap[provider]);
             const user: IAuthUser = result.user;
             const splitName = user.displayName.split(' ');
-            return new User(user.uid, splitName[0], splitName[1], user.email);
+            return new User(user.uid, splitName[0], splitName[1], user.email, user.photoURL);
         } catch (error) {
             throw(error);
         }
@@ -58,7 +58,7 @@ export default class FirebaseProviderAuthentication implements IAuthentication {
                 const firebaseAuthUser: IAuthUser = firebaseUser;
                 const splitName = firebaseAuthUser.displayName.split(' ');
                 const uid: string = firebaseAuthUser.uid;
-                const user = new User(uid, splitName[0], splitName[1], firebaseUser.email);
+                const user = new User(uid, splitName[0], splitName[1], firebaseAuthUser.email, firebaseAuthUser.photoURL);
                 userLoggedInHandler(user);
             }
         });

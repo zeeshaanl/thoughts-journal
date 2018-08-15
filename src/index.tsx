@@ -13,6 +13,8 @@ import {injectGlobal} from 'styled-components';
 
 firebase.initializeApp(firebaseConfig);
 
+console.log(firebase.auth().currentUser, 'curent user');
+
 const firebaseProviderAuthentication = new FirebaseProviderAuthentication(firebase);
 const useCaseRegistry = new UseCaseRegistry(firebaseProviderAuthentication);
 
@@ -28,6 +30,6 @@ injectGlobal`
   body {
     margin: 0;
     padding: 0;
-    font-family: sans-serif;
+    font-family: "Roboto", sans-serif;;
   }`;
 
