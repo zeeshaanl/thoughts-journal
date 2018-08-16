@@ -16,7 +16,9 @@ import 'react-router-modal/css/react-router-modal.css';
 import LoginModal from "./LoginModal";
 import ProtectedRoute from "./ProtectedRoute";
 import Thoughts from "./Thoughts/Thoughts";
+import ThoughtsContainer from "./Thoughts/Container/ThoughtsContainer";
 import RegisterButtons from "./RegisterButtons";
+import store from "../store/store";
 
 interface IState {
     user?: User,
@@ -66,7 +68,7 @@ class App extends React.Component<IProps, IState> {
                                 component={LoginModal}
                                 props={{handleGoogleLogin: this.handleGoogleLogin, isLoggedIn: !!user}}
                             />
-                            <ProtectedRoute path='/thoughts' user={user} component={Thoughts} />
+                            <ProtectedRoute path='/thoughts' user={user} component={ThoughtsContainer} />
                         </div>}
                     </div>
                 </Router>

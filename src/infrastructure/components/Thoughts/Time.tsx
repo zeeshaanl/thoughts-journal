@@ -16,7 +16,7 @@ font-size: 1.2em;
 const Time = ({dateTime}: IProps) => {
     return (
         <TimeContainer>
-            <Moment date={dateTime} format='hh:mm:ss' />
+            <Moment date={dateTime} format='hh:mm:ss A' />
         </TimeContainer>
     );
 };

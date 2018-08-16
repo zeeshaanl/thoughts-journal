@@ -5,5 +5,6 @@ export default class User {
         this.lastName = lastName;
         this.email = email;
         this.photoUrl = photoUrl;
+        Object.freeze(this);
     }
 }

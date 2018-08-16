@@ -5,6 +5,9 @@ import Moment from "react-moment";
 import * as keymaster from 'keymaster';
 import ThoughtsHeaderContainer from "./ThoughtsHeaderContainer";
 import Time from "./Time";
+import Thought from "../../../domain/viewModel/Thought";
+import Button from "@material-ui/core/Button/Button";
+import CompletedThought from "./CompletedThought";
 
 
 const ThoughtsBody = styled.div`
@@ -13,24 +16,17 @@ const ThoughtsBody = styled.div`
   text-align: center;
 `;
 
-const CompletedThought = styled.div`
-    width: 20em;
-    min-height: 4em;
-    display: inline-flex;
-    text-align: left;
-    white-space: pre-line;
-      align-items: center;    
-`;
-
 const ThoughtInput = styled.textarea`
   //border-radius: 4px;
   width: 20em;
+  margin-right: 1em;
 `;
 
 const ThoughtRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 2em;
 `;
 
 interface IThought {
@@ -40,13 +36,17 @@ interface IThought {
 }
 
 interface IProps {
-    user: User
+    user: User,
+    thoughtsById: {
+        [id: string]: Thought
+    } | {},
+    thoughtIds: string[],
+    addThought: any
 }
 
 interface IState {
     currentDateTime: Date,
-    currentThoughtMessage: string,
-    thoughts: IThought[]
+    currentThoughtMessage: string
 }
 
 const pressedKeys: any = new Set();
@@ -56,14 +56,14 @@ class Thoughts extends React.Component<IProps, IState> {
     public state = {
         currentDateTime: new Date(),
         currentThoughtMessage: '',
-        thoughts: []
+        thoughtsById: {},
+        thoughtIds: []
     };
 
     public timeInterval: NodeJS.Timer;
 
     public componentDidMount() {
         this.timeInterval = setInterval(() => {
-            console.log('in interval');
             this.setState(() => ({currentDateTime: new Date()}))
         }, 1000)
     }
@@ -73,18 +73,17 @@ class Thoughts extends React.Component<IProps, IState> {
     }
 
     public render() {
-        const {user} = this.props;
-        const {currentDateTime, currentThoughtMessage, thoughts} = this.state;
+        const {user, thoughtsById, thoughtIds, addThought} = this.props;
+        const {currentDateTime, currentThoughtMessage} = this.state;
 
         return (
             <div>
                 <ThoughtsHeaderContainer user={user} currentDateTime={currentDateTime} />
                 <ThoughtsBody>
                     {
-                        thoughts.map((thought: IThought) =>
-                            <ThoughtRow key={thought.id}>
-                                <Time dateTime={thought.timestamp} />
-                                <CompletedThought>{thought.message}</CompletedThought>
+                        thoughtIds.map((thoughtId: string) =>
+                            <ThoughtRow key={thoughtsById[thoughtId].id}>
+                                <CompletedThought time={thoughtsById[thoughtId].timestamp} message={thoughtsById[thoughtId].message} />
                             </ThoughtRow>
                         )
                     }
@@ -95,14 +94,15 @@ class Thoughts extends React.Component<IProps, IState> {
                             onKeyDown={(event) => {
                                 pressedKeys.add(event.keyCode);
                                 if (pressedKeys.has(13) && pressedKeys.has(16) && currentThoughtMessage.trim()) {
-                                    console.log('key press recorded');
-                                    this.addThought(currentThoughtMessage)
+                                    addThought(currentThoughtMessage);
+                                    this.currentThoughtHandler('');
                                 }
                             }}
                             onKeyUp={(event) => {
                                 pressedKeys.delete(event.keyCode)
                             }}
                             onChange={(event) => this.currentThoughtHandler(event.target.value)} />
+                        <Button variant='raised' color='primary' onClick={() => addThought(currentThoughtMessage)}>Add Thought</Button>
                     </ThoughtRow>
                 </ThoughtsBody>
             </div>
@@ -112,19 +112,6 @@ class Thoughts extends React.Component<IProps, IState> {
     private currentThoughtHandler = (message: string) => {
         this.setState(() => ({currentThoughtMessage: message}))
     };
-
-    private addThought = (message: string) => {
-        const thought: IThought = {
-            id: new Date().getUTCMilliseconds().toString(),
-            message,
-            timestamp: new Date(),
-        };
-        this.setState(() => ({
-            ...this.state,
-            currentThoughtMessage: '',
-            thoughts: [...this.state.thoughts, thought]
-        }))
-    }
 }
 
 export default Thoughts;

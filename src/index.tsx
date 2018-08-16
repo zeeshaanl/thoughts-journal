@@ -10,16 +10,19 @@ import FirebaseProviderAuthentication from "./infrastructure/firebase/firebasePr
 import * as firebase from 'firebase';
 import firebaseConfig from './infrastructure/firebase/config';
 import {injectGlobal} from 'styled-components';
+import {Provider} from 'react-redux'
+
+import store from 'src/infrastructure/store/store';
 
 firebase.initializeApp(firebaseConfig);
-
-console.log(firebase.auth().currentUser, 'curent user');
 
 const firebaseProviderAuthentication = new FirebaseProviderAuthentication(firebase);
 const useCaseRegistry = new UseCaseRegistry(firebaseProviderAuthentication);
 
 ReactDOM.render(
-    <App useCaseRegistry={useCaseRegistry} />,
+    <Provider store={store}>
+        <App useCaseRegistry={useCaseRegistry} />
+    </Provider>,
     document.getElementById('root') as HTMLElement
 );
 registerServiceWorker();
