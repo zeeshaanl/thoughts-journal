@@ -7,4 +7,5 @@ Technologies used:\
 **Typescript**\
 **React**\
 **React-router v4**\
+**Redux**\
 **Firebase Authentication**
