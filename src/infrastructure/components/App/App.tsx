@@ -55,7 +55,7 @@ class App extends React.Component<IProps, IState> {
                             <Route
                                 exact={true}
                                 path={routes.home}
-                                render={(props: any) => <RegisterButtons {...props} isSignedIn={!!user} />}
+                                render={(props: any) => <RegisterButtons {...props} isLoggedIn={isLoggedIn} />}
                             />
                             <ModalRoute
                                 path={routes.login}

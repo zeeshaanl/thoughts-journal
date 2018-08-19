@@ -74,7 +74,9 @@ class ThoughtsHeader extends React.Component<IProps, IState> {
                         open={!!anchorDropdownElement}
                         onClose={this.handleClose}
                     >
-                        <MenuItem onClick={this.logout}>Logout</MenuItem>
+                        <Link to={routes.home}>
+                            <MenuItem onClick={this.logout}>Logout</MenuItem>
+                        </Link>
                     </Menu>
                 </HeaderAvatar>
             </ThoughtsHeaderContainer>

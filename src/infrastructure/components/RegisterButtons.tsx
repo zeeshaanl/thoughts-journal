@@ -12,17 +12,17 @@ const buttonStyle = {
 };
 
 interface IProps {
-    isSignedIn: boolean
+    isLoggedIn: boolean
 }
 
 const RegisterContainer = styled.div`
   text-align: center;
 `;
 
-const RegisterButtons = ({isSignedIn = false}: IProps) => {
+const RegisterButtons = ({isLoggedIn = false}: IProps) => {
     return (
         <RegisterContainer>
-            {isSignedIn ?
+            {isLoggedIn ?
                 <Link to={routes.thoughts}>
                     <Button style={buttonStyle} size='large' color='primary' variant='raised'>
                         Go to my thoughts
