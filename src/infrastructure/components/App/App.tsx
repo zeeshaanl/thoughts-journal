@@ -1,42 +1,36 @@
 import * as React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import User from "../../domain/viewModel/User";
-import IntroPage from "./IntroPage";
-import UseCaseRegistry from "../../application/useCase/UseCaseRegistry";
+import User from "../../../domain/viewModel/User";
+import IntroPage from "../IntroPage";
+import UserActionsUseCaseRegistry from "../../../application/useCase/userActions/UserActionsUseCaseRegistry";
 import {ModalContainer, ModalRoute} from 'react-router-modal';
 import styled from 'styled-components';
+import routes from '../../routes';
 import {
-    BrowserRouter as Router,
-    Route,
-    Link,
-    Redirect,
-    withRouter
+    BrowserRouter as Router, Redirect,
+    Route
 } from 'react-router-dom'
 import 'react-router-modal/css/react-router-modal.css';
-import LoginModal from "./LoginModal";
-import ProtectedRoute from "./ProtectedRoute";
-import Thoughts from "./Thoughts/Thoughts";
-import ThoughtsContainer from "./Thoughts/Container/ThoughtsContainer";
-import RegisterButtons from "./RegisterButtons";
-import store from "../store/store";
+import LoginModal from "../LoginModal";
+import ProtectedRoute from "../ProtectedRoute";
+import ThoughtsContainer from "../Thoughts/ThoughtsContainer";
+import RegisterButtons from "../RegisterButtons";
+import {IRemoveUser, ISaveUser} from "../../actions/UserActions";
 
 interface IState {
-    user?: User,
     loadingAuth: boolean
 }
 
 interface IProps {
-    useCaseRegistry: UseCaseRegistry
+    useCaseRegistry: UserActionsUseCaseRegistry,
+    saveUser: (user: User) => ISaveUser,
+    removeUser: () => IRemoveUser,
+    user: User
 }
-
-
-const YOUR_FIREBASE_API_KEY = 'AIzaSyAjtxmQD29dAeMruRmTjq7ZkHuCDjwm-as';
-console.log(localStorage.getItem(`firebase:authUser:${YOUR_FIREBASE_API_KEY}:[DEFAULT]`), 'localstorage');
 
 class App extends React.Component<IProps, IState> {
     public state: IState = {
-        loadingAuth: true,
-        user: undefined
+        loadingAuth: true
     };
 
     public componentDidMount() {
@@ -44,7 +38,9 @@ class App extends React.Component<IProps, IState> {
     }
 
     public render() {
-        const {user, loadingAuth} = this.state;
+        const {loadingAuth} = this.state;
+        const {user} = this.props;
+        const isLoggedIn: boolean = !!user && Object.keys(user).length !== 0;
         return (
             <div>
                 <CssBaseline />
@@ -52,23 +48,23 @@ class App extends React.Component<IProps, IState> {
                     <div>
                         <Route
                             exact={true}
-                            path="/"
+                            path={routes.home}
                             component={IntroPage}
                         />
                         {!loadingAuth && <div>
                             <Route
                                 exact={true}
-                                path="/"
+                                path={routes.home}
                                 render={(props: any) => <RegisterButtons {...props} isSignedIn={!!user} />}
                             />
                             <ModalRoute
-                                path='/login'
-                                parentPath='/thoughts'
-                                closeModal='/'
+                                path={routes.login}
+                                parentPath={routes.thoughts}
+                                closeModal={routes.home}
                                 component={LoginModal}
-                                props={{handleGoogleLogin: this.handleGoogleLogin, isLoggedIn: !!user}}
+                                props={{handleGoogleLogin: this.handleGoogleLogin, isLoggedIn}}
                             />
-                            <ProtectedRoute path='/thoughts' user={user} component={ThoughtsContainer} />
+                            <ProtectedRoute handleLogout={this.handleGoogleLogout} path={routes.thoughts} isLoggedIn={isLoggedIn} user={user} component={ThoughtsContainer} />
                         </div>}
                     </div>
                 </Router>
@@ -80,7 +76,7 @@ class App extends React.Component<IProps, IState> {
     private handleGoogleLogin = async () => {
         try {
             const user: User = await this.props.useCaseRegistry.createUserUseCase.invoke('google');
-            this.setState({user});
+            this.props.saveUser(user);
         } catch (error) {
             console.log(error, 'Error in login');
         }
@@ -89,7 +85,7 @@ class App extends React.Component<IProps, IState> {
     private handleGoogleLogout = async () => {
         try {
             const result = await this.props.useCaseRegistry.logoutUseCase.invoke();
-            console.log(result, 'logout result');
+            this.props.removeUser();
         } catch (error) {
             console.log(error, 'Error in logout');
         }
@@ -98,7 +94,13 @@ class App extends React.Component<IProps, IState> {
     private getLoggedInUser = () => {
         // if !this.props.user
         this.props.useCaseRegistry.checkIfUserIsSignedIn.invoke((user: User) => {
-            this.setState({user, loadingAuth: false})
+            if (user) {
+                this.props.saveUser(user);
+                this.setState({loadingAuth: false})
+            } else {
+                this.props.removeUser();
+                this.setState({loadingAuth: false})
+            }
         });
     }
 }

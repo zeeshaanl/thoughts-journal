@@ -1,13 +1,12 @@
-import {IAuthentication} from "../service/Authentication";
+import {IAuthentication} from "../../service/Authentication";
 
-export default class LogoutUseCase {
+export default class SignInUseCase {
     private authenticationService: IAuthentication;
-
     constructor(authenticationService: IAuthentication) {
         this.authenticationService = authenticationService;
     }
 
     public async invoke(...args: any[]) {
-        await this.authenticationService.logOut();
+        await this.authenticationService.signIn(args);
     }
 }

@@ -4,6 +4,7 @@ import {
 } from 'react-router-dom'
 import Button from "@material-ui/core/Button/Button";
 import styled from "styled-components";
+import routes from '../routes';
 
 const buttonStyle = {
     fontSize: '0.9em',
@@ -22,12 +23,12 @@ const RegisterButtons = ({isSignedIn = false}: IProps) => {
     return (
         <RegisterContainer>
             {isSignedIn ?
-                <Link to='/thoughts'>
+                <Link to={routes.thoughts}>
                     <Button style={buttonStyle} size='large' color='primary' variant='raised'>
                         Go to my thoughts
                     </Button>
                 </Link> :
-                <Link to='/login'>
+                <Link to={routes.login}>
                     <Button style={buttonStyle} size='large' color='primary' variant='raised'>
                         Sign up
                     </Button>

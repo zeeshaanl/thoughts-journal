@@ -53,7 +53,7 @@ export default class FirebaseProviderAuthentication implements IAuthentication {
     public checkIfUserIsLoggedIn = async (userLoggedInHandler: (user: User | null) => void) => {
         this.firebase.auth().onAuthStateChanged((firebaseUser: any) => {
             if (!firebaseUser) {
-                userLoggedInHandler(firebaseUser);
+                userLoggedInHandler(null);
             } else {
                 const firebaseAuthUser: IAuthUser = firebaseUser;
                 const splitName = firebaseAuthUser.displayName.split(' ');

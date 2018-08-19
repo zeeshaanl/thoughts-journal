@@ -5,9 +5,11 @@ import User from "../../../domain/viewModel/User";
 import Moment from "react-moment";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
+import {Link} from "react-router-dom";
+import routes from '../../routes';
 
 
-const ThoughtsHeader = styled.div`
+const ThoughtsHeaderContainer = styled.div`
 margin-top: 1em;
 position: relative;
 `;
@@ -33,14 +35,15 @@ const AvatarContainer = styled(Avatar)`
 
 interface IProps {
     currentDateTime: Date,
-    user: User
+    user: User,
+    handleLogout: () => void
 }
 
 interface IState {
     anchorDropdownElement: EventTarget | null
 }
 
-class ThoughtsHeaderContainer extends React.Component<IProps, IState> {
+class ThoughtsHeader extends React.Component<IProps, IState> {
     public state = {
         anchorDropdownElement: null
     };
@@ -48,9 +51,12 @@ class ThoughtsHeaderContainer extends React.Component<IProps, IState> {
     public render() {
         const {currentDateTime, user} = this.props;
         const {anchorDropdownElement} = this.state;
+
         return (
-            <ThoughtsHeader>
-                <HeaderLogo>Thoughts Journal</HeaderLogo>
+            <ThoughtsHeaderContainer>
+                <Link to={routes.home}>
+                    <HeaderLogo>Thoughts Journal</HeaderLogo>
+                </Link>
                 <HeaderTitle>
                     <Moment date={currentDateTime} format='dddd DD/MM/YY' />
                 </HeaderTitle>
@@ -68,10 +74,10 @@ class ThoughtsHeaderContainer extends React.Component<IProps, IState> {
                         open={!!anchorDropdownElement}
                         onClose={this.handleClose}
                     >
-                        <MenuItem onClick={this.handleClose}>Logout</MenuItem>
+                        <MenuItem onClick={this.logout}>Logout</MenuItem>
                     </Menu>
                 </HeaderAvatar>
-            </ThoughtsHeader>
+            </ThoughtsHeaderContainer>
         );
     }
 
@@ -83,6 +89,11 @@ class ThoughtsHeaderContainer extends React.Component<IProps, IState> {
         this.setState({anchorDropdownElement: null});
     };
 
+    private logout = () => {
+        this.handleClose();
+        this.props.handleLogout();
+    }
+
 }
 
-export default ThoughtsHeaderContainer;
+export default ThoughtsHeader;

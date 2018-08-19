@@ -1,8 +1,8 @@
 export default {
-    apiKey: "AIzaSyAjtxmQD29dAeMruRmTjq7ZkHuCDjwm-as",
-    authDomain: "test-f3f38.firebaseapp.com",
-    databaseURL: "https://test-f3f38.firebaseio.com",
-    messagingSenderId: "654369996275",
-    projectId: "test-f3f38",
-    storageBucket: "test-f3f38.appspot.com"
+    apiKey: "AIzaSyDvfUATUAcirJcrVmBonZiojGLDgrkvuyY",
+    authDomain: "thoughts-journal-1a3e1.firebaseapp.com",
+    databaseURL: "https://thoughts-journal-1a3e1.firebaseio.com",
+    projectId: "thoughts-journal-1a3e1",
+    storageBucket: "",
+    messagingSenderId: "881368990205"
 };

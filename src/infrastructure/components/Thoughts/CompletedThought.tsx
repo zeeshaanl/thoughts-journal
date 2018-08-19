@@ -1,10 +1,12 @@
 import * as React from 'react';
 import Time from "./Time";
 import styled from "styled-components";
-import Button from "@material-ui/core/Button/Button";
+import Button from "../Button";
+import {IRemoveThought} from "../../actions/ThoughtActions";
 
 const CompletedThoughtDiv = styled.div`
     width: 20em;
+    margin-right: 1em;
     min-height: 4em;
     display: flex;
     white-space: pre-line;
@@ -12,20 +14,23 @@ const CompletedThoughtDiv = styled.div`
 `;
 
 interface IProps {
+    id: string,
     time: Date,
-    message: string
+    message: string,
+    removeThought: (id: string) => IRemoveThought,
 }
 
 class CompletedThought extends React.PureComponent<IProps> {
     public render() {
-        const {time, message} = this.props;
-        console.log('in render');
+        const {id, time, message, removeThought} = this.props;
 
         return (
             <React.Fragment>
                 <Time dateTime={time} />
                 <CompletedThoughtDiv>{message}</CompletedThoughtDiv>
-                <Button variant='raised' color='secondary'>Remove Thought</Button>
+                <Button onClick={() => removeThought(id)} color='secondary'>
+                    Remove Thought
+                </Button>
             </React.Fragment>
         );
     }

@@ -1,7 +1,7 @@
-import {IAuthentication} from "../service/Authentication";
-import User from "../../domain/viewModel/User";
+import {IAuthentication} from "../../service/Authentication";
+import User from "../../../domain/viewModel/User";
 
-export default class CheckIfUserIsSignedIn {
+export default class CheckIfUserIsSignedInUseCase {
     private authenticationService: IAuthentication;
 
     constructor(authenticationService: IAuthentication) {
