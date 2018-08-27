@@ -1,4 +1,4 @@
-import IThoughtRepository from "../../../domain/ThoughtRepository";
+import IThoughtRepository from "../../../domain/repo/ThoughtRepo";
 import PersistThoughtUseCase from "./PersistThoughtUseCase";
 
 export default class ThoughtActionsUseCaseRegistry {

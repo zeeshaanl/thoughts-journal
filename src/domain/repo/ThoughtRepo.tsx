@@ -1,4 +1,4 @@
-import Thought from "./viewModel/Thought";
+import Thought from "../viewModel/Thought";
 
 export default interface IThoughtRepository {
     persistThought: (thought: Thought) => void,

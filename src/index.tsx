@@ -19,6 +19,7 @@ firebase.initializeApp(firebaseConfig);
 const firebaseProviderAuthentication = new FirebaseProviderAuthentication(firebase);
 const useCaseRegistry = new UserActionsUseCaseRegistry(firebaseProviderAuthentication);
 
+
 ReactDOM.render(
     <Provider store={store}>
         <AppContainer useCaseRegistry={useCaseRegistry} />

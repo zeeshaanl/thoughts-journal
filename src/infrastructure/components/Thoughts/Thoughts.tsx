@@ -44,6 +44,7 @@ interface IProps {
     thoughtIds: string[],
     addThought: (message: string) => IAddThought,
     removeThought: (id: string) => IRemoveThought,
+    getThoughts: (date?: Date) => any,
     handleLogout: () => void
 }
 
@@ -68,7 +69,9 @@ class Thoughts extends React.Component<IProps, IState> {
     public componentDidMount() {
         this.timeInterval = setInterval(() => {
             this.setState(() => ({currentDateTime: new Date()}))
-        }, 1000)
+        }, 1000);
+        console.log('in did mount');
+        this.props.getThoughts();
     }
 
     public componentWillUnmount() {

@@ -1,7 +1,8 @@
-import {applyMiddleware, createStore} from "redux";
+import {createStore, applyMiddleware} from 'redux';
+import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers/RootReducer';
 import {addThought} from "../actions/ThoughtActions";
-import logger from 'redux-logger'
+import loggerMiddleware from 'redux-logger'
 import {throttle} from 'lodash';
 
 // Persist to localStorage code
@@ -29,7 +30,12 @@ import {throttle} from 'lodash';
 //
 // const persistedState = loadState();
 
-const store = createStore(rootReducer, applyMiddleware(logger));
+const middleware = [
+    loggerMiddleware,
+    thunkMiddleware
+];
+
+const store = createStore(rootReducer, applyMiddleware(...middleware));
 
 // store.subscribe(throttle(() => {
 //     saveState({

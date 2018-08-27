@@ -3,7 +3,7 @@ import CreateUserUseCase from "./CreateUserUseCase";
 import LogoutUseCase from "./LogoutUseCase";
 import SignInUseCase from "./SignInUseCase";
 import CheckIfUserIsSignedInUseCase from "./CheckIfUserIsSignedInUseCase";
-import IThoughtRepository from "../../../domain/ThoughtRepository";
+import IThoughtRepository from "../../../domain/repo/ThoughtRepo";
 
 export default class UserActionsUseCaseRegistry {
     public createUserUseCase: CreateUserUseCase;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from "react-redux";
 import {IAppState} from "../../reducers/RootReducer";
 import {Dispatch} from "redux";
-import {addThought, IAddThought, IRemoveThought, removeThought} from "../../actions/ThoughtActions";
+import {addThought, getThoughts, IAddThought, IRemoveThought, removeThought} from "../../actions/ThoughtActions";
 import Thought from "../../../domain/viewModel/Thought";
 import Thoughts from "./Thoughts";
 import User from "../../../domain/viewModel/User";
@@ -37,6 +37,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
             addThought(thought)
         )
     },
+    getThoughts: (date: Date) => dispatch(getThoughts(date)),
     removeThought: (id: string): IRemoveThought =>
         dispatch(
             removeThought(id)
